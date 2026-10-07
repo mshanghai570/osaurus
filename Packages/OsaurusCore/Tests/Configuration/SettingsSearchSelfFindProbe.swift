@@ -202,6 +202,8 @@ struct SettingsSearchSelfFindProbe {
             ("codex cli", "server.codexCLI"),
             ("schedules", "schedules.overview"),
             ("sandbox", "sandbox.overview"),
+            ("installed apps", "apps.overview"),
+            ("app directory", "apps.overview"),
             ("macos permissions", "permissions.tools"),
             ("pair with n8n", "agentChannels.n8n.pairingCode"),
             ("pairing code", "agentChannels.n8n.pairingCode"),

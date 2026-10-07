@@ -70,6 +70,13 @@ struct AppleAppCatalogTests {
         #expect(AppleApp.parse("") == nil)
     }
 
+    @Test("installed Apple app bundle identifiers resolve to their native tool groups")
+    func bundleIdentifierMapping() {
+        #expect(AppleApp.app(forBundleIdentifier: "com.apple.iCal") == .calendar)
+        #expect(AppleApp.app(forBundleIdentifier: "COM.APPLE.MUSIC") == .music)
+        #expect(AppleApp.app(forBundleIdentifier: "com.example.unknown") == nil)
+    }
+
     @Test("sorted() follows allCases order")
     func sortedOrder() {
         #expect(AppleApp.sorted([.shortcuts, .calendar, .mail]) == [.calendar, .mail, .shortcuts])
