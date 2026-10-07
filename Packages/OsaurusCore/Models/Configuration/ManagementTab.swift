@@ -38,7 +38,10 @@ public enum ManagementSection: String, CaseIterable, Identifiable, Sendable {
     public var tabs: [ManagementTab] {
         switch self {
         case .general:
-            [.settings, .chat, .voice, .themes, .credits, .workspaces, .connect, .identity, .permissions, .privacy]
+            [
+                .settings, .chat, .voice, .themes, .credits, .workspaces, .connect,
+                .identity, .apps, .permissions, .privacy,
+            ]
         case .models: [.models, .providers, .imageGeneration]
         case .agents: [.orchestrator, .agents, .agentChannels]
         case .capabilities: [.search, .knowledge, .memory, .tools, .skills, .commands]
@@ -81,6 +84,7 @@ public enum ManagementTab: String, CaseIterable, Identifiable, Sendable {
     case workspaces
     case connect
     case insights
+    case apps
 
     public var id: String { rawValue }
 
@@ -92,7 +96,7 @@ public enum ManagementTab: String, CaseIterable, Identifiable, Sendable {
     /// The sidebar section this tab belongs to.
     public var section: ManagementSection {
         switch self {
-        case .settings, .chat, .voice, .themes, .credits, .workspaces, .connect, .identity, .permissions, .privacy:
+        case .settings, .chat, .voice, .themes, .credits, .workspaces, .connect, .identity, .apps, .permissions, .privacy:
             .general
         case .models, .providers, .imageGeneration: .models
         case .orchestrator, .agents, .agentChannels: .agents
@@ -148,6 +152,7 @@ public enum ManagementTab: String, CaseIterable, Identifiable, Sendable {
         case .chat: "text.bubble.fill"
         case .settings: "gearshape.fill"
         case .orchestrator: "point.3.connected.trianglepath.dotted"
+        case .apps: "square.grid.2x2"
         }
     }
 
@@ -182,6 +187,7 @@ public enum ManagementTab: String, CaseIterable, Identifiable, Sendable {
         case .chat: L("Conversation")
         case .settings: L("General")
         case .orchestrator: L("Orchestrator")
+        case .apps: L("Apps")
         }
     }
 

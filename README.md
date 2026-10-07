@@ -218,6 +218,8 @@ Document attachments keep structure where the file format exposes it: CSV/TSV ta
 
 **Shortcuts, Spotlight & Siri** -- Osaurus ships App Intents, so "Ask Osaurus" and "Run Osaurus Agent" are available system-wide the moment you install -- no setup. Ask your active agent and get the reply inline, or kick off a custom agent in the background. See [App Intents Guide](docs/APP_INTENTS.md).
 
+**Installed Apps** -- Browse apps found in common Mac application folders, see which Apple apps have built-in Osaurus tools, check shared automation-permission readiness, and launch apps from one searchable directory. See [Installed Apps](docs/APP_DIRECTORY.md).
+
 **Developer Tools** -- Server explorer, MCP tool inspector, inference monitoring, plugin debugging. See [Developer Tools Guide](docs/DEVELOPER_TOOLS.md). For the inference scheduler, model leases, continuous-batching engine, and feature flags that tune them, see [Inference Runtime](docs/INFERENCE_RUNTIME.md).
 
 ## Telemetry

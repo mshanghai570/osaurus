@@ -58,6 +58,28 @@ public enum AppleApp: String, CaseIterable, Codable, Sendable, Hashable {
         }
     }
 
+    /// Bundle identifier used to match an installed app to its native tools.
+    public var bundleIdentifier: String {
+        switch self {
+        case .calendar: return "com.apple.iCal"
+        case .reminders: return "com.apple.reminders"
+        case .contacts: return "com.apple.AddressBook"
+        case .notes: return "com.apple.Notes"
+        case .mail: return "com.apple.mail"
+        case .messages: return "com.apple.MobileSMS"
+        case .maps: return "com.apple.Maps"
+        case .music: return "com.apple.Music"
+        case .shortcuts: return "com.apple.shortcuts"
+        }
+    }
+
+    /// Native app integration for an installed application's bundle id.
+    public static func app(forBundleIdentifier bundleIdentifier: String) -> AppleApp? {
+        allCases.first {
+            $0.bundleIdentifier.caseInsensitiveCompare(bundleIdentifier) == .orderedSame
+        }
+    }
+
     /// macOS permissions the app's tools need. Individual tools may narrow
     /// this (for example `messages_read` needs only Full Disk Access while
     /// `messages_send` needs only Automation for Messages); the union is

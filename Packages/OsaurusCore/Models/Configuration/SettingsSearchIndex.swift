@@ -129,6 +129,7 @@ public enum SettingsSearchIndex {
         "search.premium",
         "credits.webSearch",
         "privacy.tab",
+        "apps.overview",
         "tools.services",
         "server.connection",
         "server.cors",
@@ -163,6 +164,17 @@ public enum SettingsSearchIndex {
 
     /// Every searchable setting, grouped by tab in declaration order.
     public static let entries: [SettingsSearchEntry] = [
+        .init(
+            id: "apps.overview",
+            tab: .apps,
+            section: "Installed Applications",
+            title: "Installed Apps",
+            keywords: [
+                "applications", "app directory", "app library", "launch app",
+                "mac apps", "app integrations", "app permissions",
+            ]
+        ),
+
         // MARK: Settings (General)
         .init(
             id: "settings.general.hotkey",

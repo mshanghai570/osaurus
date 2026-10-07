@@ -229,6 +229,8 @@ private extension ManagementView {
             ServerView()
         case .permissions:
             PermissionsView()
+        case .apps:
+            InstalledAppsView()
         case .computerUse:
             ComputerUseSettingsView()
         case .browser:
