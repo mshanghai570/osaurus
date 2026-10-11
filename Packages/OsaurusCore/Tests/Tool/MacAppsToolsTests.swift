@@ -23,7 +23,12 @@ struct MacAppsToolsTests {
         let bundlePath: String
 
         static func make() throws -> Fixture {
-            let root = NSTemporaryDirectory() + "/mac-apps-tests-\(UUID().uuidString)"
+            // URL-based join: NSTemporaryDirectory() ends with "/", and naive
+            // string concat produces a "//" the resolver normalizes away,
+            // which would make path-equality assertions fail spuriously.
+            let root = URL(fileURLWithPath: NSTemporaryDirectory())
+                .appendingPathComponent("mac-apps-tests-\(UUID().uuidString)")
+                .path
             let bundle = root + "/Fixture.app"
             let contents = bundle + "/Contents"
             let resources = contents + "/Resources"

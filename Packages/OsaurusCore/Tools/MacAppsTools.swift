@@ -282,9 +282,17 @@ final class MacAppsTool: OsaurusTool, @unchecked Sendable {
             if truncated { break }
         }
         if apps.isEmpty, query != nil {
+            // Keep the schema stable for the model: an empty query result is
+            // still an `apps` listing (count 0), not a bare text message.
             return ToolEnvelope.success(
                 tool: name,
-                result: ["text": "No installed apps match \"\(query!)\"."]
+                result: [
+                    "kind": "apps",
+                    "apps": [] as [[String: Any]],
+                    "count": 0,
+                    "truncated": false,
+                    "text": "No installed apps match \"\(query!)\".",
+                ]
             )
         }
         return ToolEnvelope.success(
