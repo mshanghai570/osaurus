@@ -15,7 +15,11 @@ set -euo pipefail
 # Only the light DMG feeds Sparkle/Homebrew (see generate_and_deploy_appcast.sh).
 
 : "${VERSION:?VERSION is required}"
-: "${DEVELOPER_ID_NAME:?DEVELOPER_ID_NAME is required}"
+
+UNSIGNED="${OSAURUS_UNSIGNED:-0}"
+if [[ "$UNSIGNED" != "1" ]]; then
+  : "${DEVELOPER_ID_NAME:?DEVELOPER_ID_NAME is required}"
+fi
 
 DMG_VARIANT="${DMG_VARIANT:-light}"
 WORKSPACE="${GITHUB_WORKSPACE:-$(pwd)}"
@@ -75,12 +79,16 @@ if [[ ! -f "$DMG_PATH" ]]; then
 fi
 
 # Normalize identity: allow DEVELOPER_ID_NAME with or without the product prefix
-CODE_SIGN_IDENTITY_VALUE="${DEVELOPER_ID_NAME}"
-if [[ "${CODE_SIGN_IDENTITY_VALUE}" != Developer\ ID\ Application:* ]]; then
-  CODE_SIGN_IDENTITY_VALUE="Developer ID Application: ${CODE_SIGN_IDENTITY_VALUE}"
-fi
+if [[ "$UNSIGNED" == "1" ]]; then
+  echo "UNSIGNED build: skipping DMG codesign"
+else
+  CODE_SIGN_IDENTITY_VALUE="${DEVELOPER_ID_NAME}"
+  if [[ "${CODE_SIGN_IDENTITY_VALUE}" != Developer\ ID\ Application:* ]]; then
+    CODE_SIGN_IDENTITY_VALUE="Developer ID Application: ${CODE_SIGN_IDENTITY_VALUE}"
+  fi
 
-codesign --force --sign "${CODE_SIGN_IDENTITY_VALUE}" "$DMG_PATH"
+  codesign --force --sign "${CODE_SIGN_IDENTITY_VALUE}" "$DMG_PATH"
+fi
 
 if [[ "$DMG_VARIANT" == "light" ]]; then
   cp "$DMG_PATH" "build_output/Osaurus.dmg"
