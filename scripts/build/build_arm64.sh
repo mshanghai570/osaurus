@@ -6,15 +6,28 @@ if [[ -z "${DEVELOPMENT_TEAM:-}" && -n "${APPLE_TEAM_ID:-}" ]]; then
   export DEVELOPMENT_TEAM="${APPLE_TEAM_ID}"
 fi
 
-: "${DEVELOPMENT_TEAM:?DEVELOPMENT_TEAM is required}"
-: "${DEVELOPER_ID_NAME:?DEVELOPER_ID_NAME is required}"
 : "${VERSION:?VERSION is required}"
+
+# OSAURUS_UNSIGNED=1: fork/CI validation builds with no Apple signing
+# secrets. Ad-hoc signs ("-") and copies the app straight out of the
+# archive instead of running -exportArchive (Developer ID export needs a
+# real cert + team). Result is a runnable local DMG, not distribution.
+UNSIGNED="${OSAURUS_UNSIGNED:-0}"
+if [[ "$UNSIGNED" == "1" ]]; then
+  echo "UNSIGNED build: ad-hoc signing, no exportArchive"
+  CODE_SIGN_IDENTITY_VALUE="-"
+  DEVELOPMENT_TEAM_VALUE=""
+else
+  : "${DEVELOPMENT_TEAM:?DEVELOPMENT_TEAM is required}"
+  : "${DEVELOPER_ID_NAME:?DEVELOPER_ID_NAME is required}"
+  DEVELOPMENT_TEAM_VALUE="${DEVELOPMENT_TEAM}"
+  CODE_SIGN_IDENTITY_VALUE="${DEVELOPER_ID_NAME}"
+fi
 
 echo "Building ARM64 version (default)..."
 
 # Normalize identity: allow DEVELOPER_ID_NAME with or without the product prefix
-CODE_SIGN_IDENTITY_VALUE="${DEVELOPER_ID_NAME}"
-if [[ "${CODE_SIGN_IDENTITY_VALUE}" != Developer\ ID\ Application:* ]]; then
+if [[ "$UNSIGNED" != "1" && "${CODE_SIGN_IDENTITY_VALUE}" != Developer\ ID\ Application:* ]]; then
   CODE_SIGN_IDENTITY_VALUE="Developer ID Application: ${CODE_SIGN_IDENTITY_VALUE}"
 fi
 
@@ -36,7 +49,7 @@ xcodebuild -workspace osaurus.xcworkspace \
   VALID_ARCHS=arm64 \
   ONLY_ACTIVE_ARCH=NO \
   CODE_SIGN_IDENTITY="${CODE_SIGN_IDENTITY_VALUE}" \
-  DEVELOPMENT_TEAM="${DEVELOPMENT_TEAM}" \
+  DEVELOPMENT_TEAM="${DEVELOPMENT_TEAM_VALUE}" \
   CODE_SIGN_STYLE=Manual \
   clean build
 
@@ -64,7 +77,7 @@ xcodebuild -workspace osaurus.xcworkspace \
   SENTRY_DSN="${SENTRY_DSN:-}" \
   MODELS_PROXY_BASE_URL="${MODELS_PROXY_BASE_URL:-}" \
   CODE_SIGN_IDENTITY="${CODE_SIGN_IDENTITY_VALUE}" \
-  DEVELOPMENT_TEAM="${DEVELOPMENT_TEAM}" \
+  DEVELOPMENT_TEAM="${DEVELOPMENT_TEAM_VALUE}" \
   CODE_SIGN_STYLE=Manual \
   archive -archivePath build/osaurus.xcarchive
 
@@ -98,7 +111,16 @@ echo "Bundling sandbox kernel into Resources/SandboxRuntime..."
 echo "Re-signing modified app bundle..."
 codesign --force --deep --options runtime --entitlements "App/osaurus/osaurus.entitlements" --sign "${CODE_SIGN_IDENTITY_VALUE}" "$ARCHIVE_APP"
 
-cat > ExportOptions.plist <<EOF
+EXPORTED_APP="build_output/Osaurus.app"
+
+if [[ "$UNSIGNED" == "1" ]]; then
+  # No Developer ID export without a cert; the archive product is already
+  # ad-hoc signed (step 3b re-sign sealed the CLI + kernel resources).
+  mkdir -p build_output
+  rm -rf "$EXPORTED_APP"
+  ditto "$ARCHIVE_APP" "$EXPORTED_APP"
+else
+  cat > ExportOptions.plist <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -106,7 +128,7 @@ cat > ExportOptions.plist <<EOF
     <key>method</key>
     <string>developer-id</string>
     <key>teamID</key>
-    <string>${DEVELOPMENT_TEAM}</string>
+    <string>${DEVELOPMENT_TEAM_VALUE}</string>
     <key>signingStyle</key>
     <string>manual</string>
     <key>signingCertificate</key>
@@ -115,12 +137,12 @@ cat > ExportOptions.plist <<EOF
 </plist>
 EOF
 
-xcodebuild -exportArchive \
-  -archivePath build/osaurus.xcarchive \
-  -exportPath build_output \
-  -exportOptionsPlist ExportOptions.plist
+  xcodebuild -exportArchive \
+    -archivePath build/osaurus.xcarchive \
+    -exportPath build_output \
+    -exportOptionsPlist ExportOptions.plist
+fi
 
-EXPORTED_APP="build_output/Osaurus.app"
 if [[ ! -d "$EXPORTED_APP" ]]; then
   echo "Error: exported app not found at $EXPORTED_APP" >&2
   exit 1
