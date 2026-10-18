@@ -255,6 +255,58 @@ public enum ProviderCredentialInstructionsCatalog {
                 storageAuthType: .none,
                 presetId: preset.rawValue
             )
+        case .kilo:
+            return ProviderCredentialInstructions(
+                providerType: providerType,
+                displayName: L("Kilo"),
+                authMethod: .apiKey,
+                getKeyURL: getKeyURL,
+                keyFormatHint: L("Copy your Kilo AI Gateway API key from app.kilo.ai/profile."),
+                storageAuthType: .apiKey,
+                presetId: preset.rawValue
+            )
+        case .nvidiaNIM:
+            return ProviderCredentialInstructions(
+                providerType: providerType,
+                displayName: L("NVIDIA NIM"),
+                authMethod: .apiKey,
+                getKeyURL: getKeyURL,
+                keyFormatHint: L("Keys start with nvapi-."),
+                storageAuthType: .apiKey,
+                presetId: preset.rawValue
+            )
+        case .requesty:
+            return ProviderCredentialInstructions(
+                providerType: providerType,
+                displayName: L("Requesty"),
+                authMethod: .apiKey,
+                getKeyURL: getKeyURL,
+                keyFormatHint: L("Keys start with rqsty-sk-."),
+                storageAuthType: .apiKey,
+                presetId: preset.rawValue
+            )
+        case .cloudflareWorkersAI:
+            return ProviderCredentialInstructions(
+                providerType: providerType,
+                displayName: L("Cloudflare Workers AI"),
+                authMethod: .apiKey,
+                getKeyURL: getKeyURL,
+                keyFormatHint: L(
+                    "Use an API token with Account → Workers AI → Read. Replace REPLACE_WITH_ACCOUNT_ID in the Base Path."
+                ),
+                storageAuthType: .apiKey,
+                presetId: preset.rawValue
+            )
+        case .siliconflow:
+            return ProviderCredentialInstructions(
+                providerType: providerType,
+                displayName: L("SiliconFlow"),
+                authMethod: .apiKey,
+                getKeyURL: getKeyURL,
+                keyFormatHint: L("Create a key at cloud.siliconflow.com."),
+                storageAuthType: .apiKey,
+                presetId: preset.rawValue
+            )
         case .custom:
             return ProviderCredentialInstructions(
                 providerType: providerType,

@@ -218,6 +218,49 @@ struct ProviderPresetsTests {
         )
     }
 
+    // MARK: - OpenAI-compatible vendor presets
+
+    /// Vendors added alongside the original set. Each must resolve to a stable
+    /// host/base path, match back from its host, and build the standard
+    /// `/chat/completions` endpoint so the existing request path just works.
+    @Test(arguments: [ProviderPreset.kilo, .nvidiaNIM, .requesty, .cloudflareWorkersAI, .siliconflow])
+    func openAICompatibleVendor_presetResolvesHostAndChatEndpoint(preset: ProviderPreset) throws {
+        let expected: [ProviderPreset: (name: String, host: String, basePath: String)] = [
+            .kilo: ("Kilo", "ai-gateway.kilo.ai", "/api/v1"),
+            .nvidiaNIM: ("NVIDIA NIM", "integrate.api.nvidia.com", "/v1"),
+            .requesty: ("Requesty", "router.requesty.ai", "/v1"),
+            .cloudflareWorkersAI: (
+                "Cloudflare Workers AI", "api.cloudflare.com",
+                "/client/v4/accounts/REPLACE_WITH_ACCOUNT_ID/ai/v1"
+            ),
+            .siliconflow: ("SiliconFlow", "api.siliconflow.com", "/v1"),
+        ]
+        let want = try #require(expected[preset])
+
+        let config = preset.configuration
+        #expect(config.name == want.name)
+        #expect(config.host == want.host)
+        #expect(config.providerProtocol == .https)
+        #expect(config.port == nil)
+        #expect(config.basePath == want.basePath)
+        #expect(config.authType == .apiKey)
+        #expect(config.providerType == .openaiLegacy)
+        #expect(ProviderPreset.knownPresets.contains(preset))
+
+        let provider = RemoteProvider(
+            name: want.name,
+            host: want.host,
+            basePath: want.basePath,
+            authType: .apiKey,
+            providerType: .openaiLegacy
+        )
+        #expect(ProviderPreset.matching(provider: provider) == preset)
+        #expect(
+            provider.url(for: provider.providerType.chatEndpoint)?.absoluteString
+                == "https://\(want.host)\(want.basePath)/chat/completions"
+        )
+    }
+
     // MARK: - OAuth-first picker grouping
 
     @Test func oauthProviders_areTheThreeOneClickProviders() throws {

@@ -1902,7 +1902,10 @@ public enum SettingsSearchIndex {
             id: "providers.overview",
             tab: .providers,
             title: "Providers",
-            keywords: ["cloud models", "provider", "api key", "openai", "anthropic", "openrouter", "xai"],
+            keywords: [
+                "cloud models", "provider", "api key", "openai", "anthropic", "openrouter", "xai",
+                "kilo", "nvidia nim", "requesty", "cloudflare workers ai", "siliconflow",
+            ],
             declarativeSection: "providers"
         ),
         .init(
