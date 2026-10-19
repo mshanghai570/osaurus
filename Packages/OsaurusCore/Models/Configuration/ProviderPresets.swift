@@ -23,6 +23,11 @@ public enum ProviderPreset: String, CaseIterable, Identifiable, Sendable {
     case minimax
     case venice
     case openrouter
+    case kilo
+    case nvidiaNIM
+    case requesty
+    case cloudflareWorkersAI
+    case siliconflow
     case ollama
     case custom
 
@@ -43,6 +48,11 @@ public enum ProviderPreset: String, CaseIterable, Identifiable, Sendable {
         case .minimax: return "MiniMax"
         case .venice: return "Venice AI"
         case .openrouter: return "OpenRouter"
+        case .kilo: return "Kilo"
+        case .nvidiaNIM: return "NVIDIA NIM"
+        case .requesty: return "Requesty"
+        case .cloudflareWorkersAI: return "Cloudflare Workers AI"
+        case .siliconflow: return "SiliconFlow"
         case .ollama: return "Ollama"
         case .custom: return "Custom"
         }
@@ -63,6 +73,11 @@ public enum ProviderPreset: String, CaseIterable, Identifiable, Sendable {
         case .minimax: return L("MiniMax M-series models")
         case .venice: return L("Privacy-first AI")
         case .openrouter: return L("Multi-provider")
+        case .kilo: return L("Kilo AI Gateway")
+        case .nvidiaNIM: return L("NVIDIA-hosted NIM models")
+        case .requesty: return L("Multi-provider router")
+        case .cloudflareWorkersAI: return L("Workers AI serverless models")
+        case .siliconflow: return L("SiliconFlow hosted models")
         case .ollama: return L("Run models locally via Ollama")
         case .custom: return L("Custom endpoint")
         }
@@ -83,6 +98,11 @@ public enum ProviderPreset: String, CaseIterable, Identifiable, Sendable {
         case .minimax: return "m.square.fill"
         case .venice: return "lock.shield.fill"
         case .openrouter: return "arrow.triangle.branch"
+        case .kilo: return "k.square.fill"
+        case .nvidiaNIM: return "cube.fill"
+        case .requesty: return "arrow.triangle.swap"
+        case .cloudflareWorkersAI: return "cloud.bolt.fill"
+        case .siliconflow: return "atom"
         case .ollama: return "shippingbox.fill"
         case .custom: return "slider.horizontal.3"
         }
@@ -103,6 +123,13 @@ public enum ProviderPreset: String, CaseIterable, Identifiable, Sendable {
         case .minimax: return [Color(red: 0.93, green: 0.27, blue: 0.23), Color(red: 0.83, green: 0.15, blue: 0.18)]
         case .venice: return [Color(red: 0.83, green: 0.66, blue: 0.33), Color(red: 0.72, green: 0.53, blue: 0.17)]
         case .openrouter: return [Color(red: 0.95, green: 0.55, blue: 0.25), Color(red: 0.85, green: 0.4, blue: 0.2)]
+        case .kilo: return [Color(red: 0.2, green: 0.83, blue: 0.6), Color(red: 0.1, green: 0.65, blue: 0.48)]
+        case .nvidiaNIM: return [Color(red: 0.46, green: 0.72, blue: 0.0), Color(red: 0.33, green: 0.55, blue: 0.0)]
+        case .requesty: return [Color(red: 0.35, green: 0.45, blue: 0.95), Color(red: 0.22, green: 0.3, blue: 0.8)]
+        case .cloudflareWorkersAI: return [
+            Color(red: 0.96, green: 0.55, blue: 0.14), Color(red: 0.9, green: 0.36, blue: 0.05),
+        ]
+        case .siliconflow: return [Color(red: 0.15, green: 0.65, blue: 0.85), Color(red: 0.05, green: 0.45, blue: 0.7)]
         case .ollama: return [Color(red: 0.36, green: 0.36, blue: 0.4), Color(red: 0.22, green: 0.22, blue: 0.26)]
         case .custom: return [Color(red: 0.55, green: 0.55, blue: 0.6), Color(red: 0.4, green: 0.4, blue: 0.45)]
         }
@@ -123,6 +150,11 @@ public enum ProviderPreset: String, CaseIterable, Identifiable, Sendable {
         case .minimax: return "https://platform.minimax.io/user-center/basic-information/interface-key"
         case .venice: return "https://venice.ai/settings/api"
         case .openrouter: return "https://openrouter.ai/keys"
+        case .kilo: return "https://app.kilo.ai/profile"
+        case .nvidiaNIM: return "https://build.nvidia.com/settings"
+        case .requesty: return "https://app.requesty.ai"
+        case .cloudflareWorkersAI: return "https://dash.cloudflare.com/profile/api-tokens"
+        case .siliconflow: return "https://cloud.siliconflow.com/account"
         case .ollama: return "https://ollama.com/download"
         case .custom: return ""
         }
@@ -148,6 +180,12 @@ public enum ProviderPreset: String, CaseIterable, Identifiable, Sendable {
         case .mistral: return "https://docs.mistral.ai/api"
         case .minimax: return "https://platform.minimax.io/docs/api-reference/api-overview"
         case .venice: return "https://docs.venice.ai"
+        case .kilo: return "https://kilo.ai/docs/gateway"
+        case .nvidiaNIM: return "https://docs.api.nvidia.com/nim"
+        case .requesty: return "https://docs.requesty.ai"
+        case .cloudflareWorkersAI:
+            return "https://developers.cloudflare.com/workers-ai/configuration/open-ai-compatibility/"
+        case .siliconflow: return "https://docs.siliconflow.com"
         case .ollama: return "https://github.com/ollama/ollama"
         default: return nil
         }
@@ -227,6 +265,40 @@ public enum ProviderPreset: String, CaseIterable, Identifiable, Sendable {
                 L("Run `ollama serve` (or launch the app)"),
                 L("Pull a model — e.g. `ollama pull llama3.2`"),
                 L("Click Connect — no API key required"),
+            ]
+        case .kilo:
+            return [
+                L("Sign in at app.kilo.ai and open your profile"),
+                L("Copy your Kilo AI Gateway API key"),
+                L("Paste the key here"),
+            ]
+        case .nvidiaNIM:
+            return [
+                L("Go to build.nvidia.com and sign in"),
+                L("Open Settings → API Keys"),
+                L("Generate an NVIDIA API key"),
+                L("Paste the key here"),
+            ]
+        case .requesty:
+            return [
+                L("Sign in at app.requesty.ai"),
+                L("Open the API Keys section"),
+                L("Create a key (it starts with rqsty-sk-)"),
+                L("Paste the key here"),
+            ]
+        case .cloudflareWorkersAI:
+            return [
+                L("Create an API token with Account → Workers AI → Read"),
+                L("Copy your Cloudflare account ID"),
+                L("Replace REPLACE_WITH_ACCOUNT_ID in the Base Path with your account ID"),
+                L("Paste the API token here"),
+            ]
+        case .siliconflow:
+            return [
+                L("Sign in at cloud.siliconflow.com"),
+                L("Open the API Keys section"),
+                L("Create an API key"),
+                L("Paste the key here"),
             ]
         default:
             return [
@@ -439,6 +511,56 @@ public enum ProviderPreset: String, CaseIterable, Identifiable, Sendable {
                 providerProtocol: .https,
                 port: nil,
                 basePath: "/api/v1",
+                authType: .apiKey,
+                providerType: .openaiLegacy
+            )
+        case .kilo:
+            return ProviderPresetConfiguration(
+                name: "Kilo",
+                host: "ai-gateway.kilo.ai",
+                providerProtocol: .https,
+                port: nil,
+                basePath: "/api/v1",
+                authType: .apiKey,
+                providerType: .openaiLegacy
+            )
+        case .nvidiaNIM:
+            return ProviderPresetConfiguration(
+                name: "NVIDIA NIM",
+                host: "integrate.api.nvidia.com",
+                providerProtocol: .https,
+                port: nil,
+                basePath: "/v1",
+                authType: .apiKey,
+                providerType: .openaiLegacy
+            )
+        case .requesty:
+            return ProviderPresetConfiguration(
+                name: "Requesty",
+                host: "router.requesty.ai",
+                providerProtocol: .https,
+                port: nil,
+                basePath: "/v1",
+                authType: .apiKey,
+                providerType: .openaiLegacy
+            )
+        case .cloudflareWorkersAI:
+            return ProviderPresetConfiguration(
+                name: "Cloudflare Workers AI",
+                host: "api.cloudflare.com",
+                providerProtocol: .https,
+                port: nil,
+                basePath: "/client/v4/accounts/REPLACE_WITH_ACCOUNT_ID/ai/v1",
+                authType: .apiKey,
+                providerType: .openaiLegacy
+            )
+        case .siliconflow:
+            return ProviderPresetConfiguration(
+                name: "SiliconFlow",
+                host: "api.siliconflow.com",
+                providerProtocol: .https,
+                port: nil,
+                basePath: "/v1",
                 authType: .apiKey,
                 providerType: .openaiLegacy
             )

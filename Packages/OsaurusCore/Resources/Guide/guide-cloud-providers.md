@@ -1,6 +1,6 @@
 ---
 title: Cloud Providers
-summary: Connect OpenAI, Anthropic, Gemini, xAI, OpenRouter, Ollama, and more alongside local models.
+summary: Connect OpenAI, Anthropic, Gemini, xAI, OpenRouter, Kilo, NVIDIA NIM, Requesty, Cloudflare Workers AI, SiliconFlow, Ollama, and more alongside local models.
 order: 30
 ---
 
@@ -11,7 +11,8 @@ Osaurus can use cloud or peer inference providers alongside local models. Your c
 ## Adding a provider
 
 - Settings… (⌘,) → Providers → Add Provider → pick a preset or Custom → Save.
-- Presets include Anthropic, OpenAI, xAI, and OpenRouter; Gemini, Venice AI, and Osaurus Router are also supported. Custom works with any OpenAI-, Anthropic-, or Open Responses-format API.
+- Presets include Anthropic, OpenAI, xAI, OpenRouter, Kilo (AI Gateway), NVIDIA NIM, Requesty, Cloudflare Workers AI, and SiliconFlow; Gemini, Venice AI, and Osaurus Router are also supported. Custom works with any OpenAI-, Anthropic-, or Open Responses-format API.
+- Cloudflare Workers AI needs your account ID in the URL: after adding the preset, edit Base Path and replace `REPLACE_WITH_ACCOUNT_ID` with your Cloudflare account ID.
 - Or ask the default Osaurus assistant in chat to add a provider — API keys are entered through a secure native sheet that stores them straight to the macOS Keychain (never through chat text).
 
 ## Provider settings

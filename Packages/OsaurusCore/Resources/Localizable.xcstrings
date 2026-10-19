@@ -1,6 +1,90 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Cloudflare Workers AI" : {
+
+    },
+    "Copy your Cloudflare account ID" : {
+
+    },
+    "Copy your Kilo AI Gateway API key" : {
+
+    },
+    "Copy your Kilo AI Gateway API key from app.kilo.ai/profile." : {
+
+    },
+    "Create a key (it starts with rqsty-sk-)" : {
+
+    },
+    "Create a key at cloud.siliconflow.com." : {
+
+    },
+    "Create an API key" : {
+
+    },
+    "Create an API token with Account → Workers AI → Read" : {
+
+    },
+    "Generate an NVIDIA API key" : {
+
+    },
+    "Go to build.nvidia.com and sign in" : {
+
+    },
+    "Keys start with nvapi-." : {
+
+    },
+    "Keys start with rqsty-sk-." : {
+
+    },
+    "Kilo" : {
+
+    },
+    "Kilo AI Gateway" : {
+
+    },
+    "Multi-provider router" : {
+
+    },
+    "NVIDIA NIM" : {
+
+    },
+    "NVIDIA-hosted NIM models" : {
+
+    },
+    "Open Settings → API Keys" : {
+
+    },
+    "Open the API Keys section" : {
+
+    },
+    "Paste the API token here" : {
+
+    },
+    "Replace REPLACE_WITH_ACCOUNT_ID in the Base Path with your account ID" : {
+
+    },
+    "Requesty" : {
+
+    },
+    "Sign in at app.kilo.ai and open your profile" : {
+
+    },
+    "Sign in at app.requesty.ai" : {
+
+    },
+    "Sign in at cloud.siliconflow.com" : {
+
+    },
+    "SiliconFlow" : {
+
+    },
+    "SiliconFlow hosted models" : {
+
+    },
+    "Workers AI serverless models" : {
+
+    },
     "Clear unsupported edit settings" : {
       "localizations" : {
         "en" : {

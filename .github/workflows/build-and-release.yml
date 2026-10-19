@@ -12,6 +12,11 @@ on:
         required: true
         default: true
         type: boolean
+      unsigned:
+        description: "Ad-hoc signed validation build (no Apple certs; DMG artifact only, not for distribution)"
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -23,6 +28,9 @@ env:
   # sync with `XCODE_VERSION` in .github/workflows/ci.yml — both files must
   # build against the same toolchain. Bump intentionally; never drift.
   XCODE_VERSION: "26.4.1"
+  # 1 only for manual workflow_dispatch runs with the `unsigned` input; every
+  # tag/release build must be 0 (real Developer ID + notarization).
+  OSAURUS_UNSIGNED: ${{ (github.event_name == 'workflow_dispatch' && inputs.unsigned) && '1' || '0' }}
 
 jobs:
   verify_ci:
@@ -113,6 +121,7 @@ jobs:
         run: bash scripts/setup_env.sh
 
       - name: Install certificates
+        if: env.OSAURUS_UNSIGNED != '1'
         env:
           MACOS_CERTIFICATE_BASE64: ${{ secrets.MACOS_CERTIFICATE_BASE64 }}
           MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
@@ -155,6 +164,7 @@ jobs:
         run: bash scripts/build/create_dmgs.sh
 
       - name: Notarize DMG (light)
+        if: env.OSAURUS_UNSIGNED != '1'
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
@@ -244,7 +254,10 @@ jobs:
     # `verify_ci` is skipped on workflow_dispatch, and the default `success()`
     # condition treats a skipped transitive dependency as failure — so without
     # this the job never runs for manual validation builds. Mirror `build`.
-    if: ${{ always() && needs.build.result == 'success' }}
+    # Unsigned validation builds never run this job: no signing certs and no
+    # point bundling a 4 GB model into a non-distributable DMG. (`env` is not
+    # available in job-level `if`, so the input is re-checked inline.)
+    if: ${{ always() && needs.build.result == 'success' && !(github.event_name == 'workflow_dispatch' && inputs.unsigned) }}
     runs-on: macos-26
     # Model download (~3.7 GB), ULFO conversion, a 4 GB notarization
     # round-trip, and the Hub upload each take minutes; bound a hung job well
@@ -264,6 +277,7 @@ jobs:
         run: bash scripts/setup_env.sh
 
       - name: Install certificates
+        if: env.OSAURUS_UNSIGNED != '1'
         env:
           MACOS_CERTIFICATE_BASE64: ${{ secrets.MACOS_CERTIFICATE_BASE64 }}
           MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}

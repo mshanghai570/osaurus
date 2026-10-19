@@ -400,6 +400,13 @@ public final class ToolRegistry: ObservableObject {
             // capability + model + gating), so both register and gate together.
             AppleScriptTool(),
             MacQueryTool(),
+            // Installed macOS apps — structured discovery and inspection of
+            // every app bundle on the machine (read-only). See MacAppsTools.swift.
+            MacAppsTool(),
+            // Write-side sibling: find/replace inside an app bundle, behind the
+            // ordinary `.ask` approval modal, with a first-edit backup and
+            // code-signature guidance. System bundles and binaries are refused.
+            MacAppsEditTool(),
         ]
         // Built-in Apple app tools (Calendar, Reminders, Contacts, Notes,
         // Mail, Messages, Maps/Location, Music, Shortcuts) — the
